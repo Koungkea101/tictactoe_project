@@ -3,7 +3,7 @@ package server;
 import java.rmi.RemoteException;
 
 public class gameServer {
-    private char[][] board= new char[3][3];
+    private final char[][] board= new char[3][3];
     private String status="Waiting for players to join in..............";
     private String winner="No Winner Yet";
     private int numPlayer=0;
@@ -20,21 +20,23 @@ public class gameServer {
     
     // @Override
     public synchronized String joinGame(String name) throws RemoteException{
-        if(numPlayer==0){
-            player0=name;
-            player1=name;
-            numPlayer++;
-            status="Waiting for another player to join in..............";
-            return "Joined as Player 1";
-        }
-        else if(numPlayer==1){
-            player0=name;
-            numPlayer++;
-            status="Player 1's turn";
-            return "Joined as Player 2";
-        }
-        else{
-            return "Game is full";
+        switch (numPlayer) {
+            case 0 -> {
+                player0=name;
+                player1=name;
+                numPlayer++;
+                status="Waiting for another player to join in..............";
+                return "Joined as Player 1";
+            }
+            case 1 -> {
+                player0=name;
+                numPlayer++;
+                status="Player 1's turn";
+                return "Joined as Player 2";
+            }
+            default -> {
+                return "Game is full";
+            }
         }
     }
     private boolean checkWinner(){
@@ -98,16 +100,14 @@ public class gameServer {
             status=winner+" wins. Game Over!!!";
             return status;
         }
-        else{
-            status=player0Turn?"Player 1's turn":"Player 2's turn";
-        }
+        
 
         if(fullBoard()){
             status="Game Over!!! It's a Draw";
             return status;
         }
 
-        status = player0Turn?"Player 1's turn":"Player 2's turn";
+        status = player0Turn?"Player 1's turn.":"Player 2's turn.";
         return  "Move is accepted";
     }
 
