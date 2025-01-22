@@ -9,5 +9,8 @@ public interface gameInterface extends Remote {
     String getBoard() throws RemoteException;
     String getWinner() throws RemoteException;
     String getStatus() throws RemoteException;
+    public String getPlayer1() throws RemoteException;
+    public String getPlayer2() throws RemoteException;
+    
     
 }

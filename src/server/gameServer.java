@@ -2,15 +2,16 @@ package server;
 
 import java.rmi.RemoteException;
 
-public class gameServer {
+public class gameServer extends java.rmi.server.UnicastRemoteObject implements gameInterface {
     private final char[][] board= new char[3][3];
     private String status="Waiting for players to join in..............";
     private String winner="No Winner Yet";
     private int numPlayer=0;
-    private boolean player0Turn=true;
-    private String player0=null,player1=null;
+    private boolean player1Turn=true;
+    private String player1=null,player2=null;
 
     public gameServer() throws Exception{
+        super();
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
                 board[i][j]='-';
@@ -20,24 +21,18 @@ public class gameServer {
     
     // @Override
     public synchronized String joinGame(String name) throws RemoteException{
-        switch (numPlayer) {
-            case 0 -> {
-                player0=name;
-                player1=name;
-                numPlayer++;
-                status="Waiting for another player to join in..............";
-                return "Joined as Player 1";
-            }
-            case 1 -> {
-                player0=name;
-                numPlayer++;
-                status="Player 1's turn";
-                return "Joined as Player 2";
-            }
-            default -> {
-                return "Game is full";
-            }
+        if (player1 == null) {
+            player1 = name;
+            status = "Waiting for Player 1 turn.";
+            return "Joined as Player 1.";
+        } else if (player2 == null) {
+            player2 = name;
+            status = "Game started!"+player1+" turn.";
+            return "Joined as Player 2.";
+        } else {
+            return "Game is full.";
         }
+        
     }
     private boolean checkWinner(){
         for(int i=0;i<3;i++){
@@ -80,23 +75,23 @@ public class gameServer {
     // @Override
     public synchronized String makeMove(int x, int y, String name) throws RemoteException{
         //check for player
-        if(player0==null||player1==null){
-            return "No player has joined yet. Waiting for player to join.......";
+        if(player1==null||player2==null){
+            return "No player has joined yet. Waiting for player to join.";
         }
         //check for turn
-        if((player0Turn && !name.equals(player0)) || (!player0Turn && !name.equals(player1))){
+        if((player1Turn && !name.equals(player1)) || (!player1Turn && !name.equals(player2))){
             return "It's not your turn";
         }
         //check for valid move
         if(x<0 || x>2 || y<0 || y>2 || board[x][y]!='-'){
-            return "Invalid Move";
+            return "Invalid move.";
         }
 
         //make move
-        board[x][y]=player0Turn?'X':'O';
-        player0Turn=!player0Turn;
+        board[x][y]=player1Turn?'X':'O';
+        player1Turn=!player1Turn;
         if(checkWinner()){
-            winner=player0Turn?player0:player1;
+            winner=player1Turn?player2:player1;
             status=winner+" wins. Game Over!!!";
             return status;
         }
@@ -107,8 +102,29 @@ public class gameServer {
             return status;
         }
 
-        status = player0Turn?"Player 1's turn.":"Player 2's turn.";
-        return  "Move is accepted";
+        status = "Player " + (player1Turn ? "1" : "2") + "'s turn.";
+        return "Move accepted.";
     }
+
+    @Override
+    public String sayGameStart() throws RemoteException {
+        return numPlayer == 2 ? "Game is ready to start!" : "Waiting for players to join...";
+    }
+
+    @Override
+    public String getWinner() throws RemoteException {
+        return winner;
+    }
+
+    @Override
+    public String getPlayer1() throws RemoteException {
+        return player1;
+    }
+
+    @Override
+    public String getPlayer2() throws RemoteException {
+        return player2;
+    }
+    
 
 }

@@ -9,7 +9,7 @@ public class serversideMain {
     public static void main(String[] args) {
         try {
             gameServer server = new gameServer();
-            Naming.rebind("Tic-Tac-Toe", (Remote) server);
+            Naming.rebind("//localhost:1099/TicTacToe", (Remote) server);
             System.out.println("Tic-Tac-Toe game server is running............");
         } catch (Exception e) {
             System.out.println("Server failed to start");
