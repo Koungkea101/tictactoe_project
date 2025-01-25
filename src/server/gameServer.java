@@ -19,7 +19,7 @@ public class gameServer extends java.rmi.server.UnicastRemoteObject implements g
         }
     }
     
-    // @Override
+
     public synchronized String joinGame(String name) throws RemoteException{
         if (player1 == null) {
             player1 = name;
@@ -72,7 +72,6 @@ public class gameServer extends java.rmi.server.UnicastRemoteObject implements g
     }
 
     // making move
-    // @Override
     public synchronized String makeMove(int x, int y, String name) throws RemoteException{
         //check for player
         if(player1==null||player2==null){
@@ -125,6 +124,4 @@ public class gameServer extends java.rmi.server.UnicastRemoteObject implements g
     public String getPlayer2() throws RemoteException {
         return player2;
     }
-    
-
 }

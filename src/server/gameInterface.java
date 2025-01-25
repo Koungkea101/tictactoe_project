@@ -11,6 +11,4 @@ public interface gameInterface extends Remote {
     String getStatus() throws RemoteException;
     public String getPlayer1() throws RemoteException;
     public String getPlayer2() throws RemoteException;
-    
-    
 }

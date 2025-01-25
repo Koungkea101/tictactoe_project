@@ -28,10 +28,10 @@ public class clientsideMain {
                     String status = newgame.getStatus();
                     if (status.contains("Game started!")) {
                         System.out.println(status);
-                        break; // Start the game when ready
+                        break; 
                     } else {
                         System.out.println("Waiting for other player to join...");
-                        Thread.sleep(5000); // Wait before checking again
+                        Thread.sleep(5000); 
                     }
                 }
                 String player1 = newgame.getPlayer1();
@@ -47,7 +47,8 @@ public class clientsideMain {
                     }
                     //check if it is the player's turn
                     if((newgame.getStatus().contains("Player 1's turn") && playername.equals(player1)) ||
-                        (newgame.getStatus().contains("Player 2's turn") && playername.equals(player2)) || newgame.getStatus().contains("Game started") && newgame.getStatus().contains(playername)){
+                        (newgame.getStatus().contains("Player 2's turn") && playername.equals(player2)) || 
+                        newgame.getStatus().contains("Game started") && newgame.getStatus().contains(playername)){
                         System.out.println("Enter the x and y coordinates of your move: ");
                         int x=s.nextInt();
                         int y=s.nextInt();
